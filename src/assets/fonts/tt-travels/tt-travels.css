@@ -1,0 +1,116 @@
+@font-face {
+  font-family: "TT Travels";
+  font-weight: 100;
+  src: url("tt-travels-thin.ttf");
+}
+
+@font-face {
+  font-family: "TT Travels";
+  font-style: italic;
+  font-weight: 100;
+  src: url("tt-travels-thin-italic.ttf");
+}
+
+@font-face {
+  font-family: "TT Travels";
+  font-weight: 200;
+  src: url("tt-travels-extra-light.ttf");
+}
+
+@font-face {
+  font-family: "TT Travels";
+  font-style: italic;
+  font-weight: 200;
+  src: url("tt-travels-extra-light-italic.ttf");
+}
+
+@font-face {
+  font-family: "TT Travels";
+  font-weight: 300;
+  src: url("tt-travels-light.ttf");
+}
+
+@font-face {
+  font-family: "TT Travels";
+  font-style: italic;
+  font-weight: 300;
+  src: url("tt-travels-light-italic.ttf");
+}
+
+@font-face {
+  font-family: "TT Travels";
+  font-weight: 400;
+  src: url("tt-travels-regular.ttf");
+}
+
+@font-face {
+  font-family: "TT Travels";
+  font-style: italic;
+  font-weight: 400;
+  src: url("tt-travels-regular-italic.ttf");
+}
+
+@font-face {
+  font-family: "TT Travels";
+  font-weight: 500;
+  src: url("tt-travels-medium.ttf");
+}
+
+@font-face {
+  font-family: "TT Travels";
+  font-style: italic;
+  font-weight: 500;
+  src: url("tt-travels-medium-italic.ttf");
+}
+
+@font-face {
+  font-family: "TT Travels";
+  font-weight: 600;
+  src: url("tt-travels-demi-bold.ttf");
+}
+
+@font-face {
+  font-family: "TT Travels";
+  font-style: italic;
+  font-weight: 600;
+  src: url("tt-travels-demi-bold-italic.ttf");
+}
+
+@font-face {
+  font-family: "TT Travels";
+  font-weight: 700;
+  src: url("tt-travels-bold.ttf");
+}
+
+@font-face {
+  font-family: "TT Travels";
+  font-style: italic;
+  font-weight: 700;
+  src: url("tt-travels-bold-italic.ttf");
+}
+
+@font-face {
+  font-family: "TT Travels";
+  font-weight: 800;
+  src: url("tt-travels-extra-bold.ttf");
+}
+
+@font-face {
+  font-family: "TT Travels";
+  font-style: italic;
+  font-weight: 800;
+  src: url("tt-travels-extra-bold-italic.ttf");
+}
+
+@font-face {
+  font-family: "TT Travels";
+  font-weight: 900;
+  src: url("tt-travels-black.ttf");
+}
+
+@font-face {
+  font-family: "TT Travels";
+  font-style: italic;
+  font-weight: 900;
+  src: url("tt-travels-black-italic.ttf");
+}
