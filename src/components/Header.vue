@@ -31,13 +31,10 @@
 </template>
 
 <script>
-import logo from '../assets/images/logo.svg';
-
 export default {
   name: 'Header',
   data() {
     return {
-      logo,
       isNavOpen: false,
     };
   },
