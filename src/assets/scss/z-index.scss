@@ -1,0 +1,10 @@
+$z-indexes: (
+  "modal": 1000,
+  "header": 100,
+  "footer": 100,
+  "dropdown": 10
+);
+
+@function z-index($z-index-name) {
+  @return map-get($z-indexes, $z-index-name);
+}

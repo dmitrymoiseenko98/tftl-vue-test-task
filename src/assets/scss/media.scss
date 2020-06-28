@@ -1,0 +1,38 @@
+@function pxToRem($px) {
+  // Convert px to rem, where by default 1rem = 16px
+  // In media value of 1 rem doesn't depends on font-size of html tag
+  // So coefficient = 1 / 16
+  $COEF: 0.0625;
+
+  @return ($px * $COEF) + "rem";
+}
+
+$screen-xs: pxToRem(375);
+$screen-sm: pxToRem(414);
+$screen-md: pxToRem(768);
+$screen-lg: pxToRem(1024);
+$screen-xl: pxToRem(1440);
+
+@mixin media($breakpoint) {
+  @if $breakpoint == "xs" {
+    @media (min-width: $screen-xs) {
+      @content;
+    }
+  } @else if $breakpoint == "sm" {
+    @media (min-width: $screen-sm) {
+      @content;
+    }
+  } @else if $breakpoint == "md" {
+    @media (min-width: $screen-md) {
+      @content;
+    }
+  } @else if $breakpoint == "lg" {
+    @media (min-width: $screen-lg) {
+      @content;
+    }
+  } @else if $breakpoint == "xl" {
+    @media (min-width: $screen-xl) {
+      @content;
+    }
+  }
+}
