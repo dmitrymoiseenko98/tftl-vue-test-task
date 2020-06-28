@@ -7,18 +7,13 @@
   @return ($px * $COEF) + "rem";
 }
 
-$screen-xs: pxToRem(375);
 $screen-sm: pxToRem(414);
 $screen-md: pxToRem(768);
 $screen-lg: pxToRem(1024);
 $screen-xl: pxToRem(1440);
 
 @mixin media($breakpoint) {
-  @if $breakpoint == "xs" {
-    @media (min-width: $screen-xs) {
-      @content;
-    }
-  } @else if $breakpoint == "sm" {
+  @if $breakpoint == "sm" {
     @media (min-width: $screen-sm) {
       @content;
     }
