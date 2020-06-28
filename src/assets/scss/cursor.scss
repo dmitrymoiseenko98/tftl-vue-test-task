@@ -1,0 +1,7 @@
+@function cursor($type) {
+  @if $type == "default" {
+    @return url("~@/assets/images/cursor/default.svg") 8 8, auto;
+  } @else if $type == "pointer" {
+    @return url("~@/assets/images/cursor/pointer.svg") 8 8, pointer;
+  }
+}

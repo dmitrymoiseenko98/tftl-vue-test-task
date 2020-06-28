@@ -21,6 +21,7 @@ export default {
 
 <style lang="scss">
 @import './assets/scss/fonts.scss';
+@import './assets/scss/cursor.scss';
 
 * {
   margin: 0;
@@ -40,14 +41,18 @@ body {
   height: 100%;
   font-size: 1.6rem;
   font-family: "TT Travels";
+  cursor: cursor("default");
 }
 
 ul {
   list-style-type: none;
 }
 
+a, button {
+  cursor: cursor("pointer");
+}
+
 button {
-  cursor: pointer;
   outline: none;
 }
 
