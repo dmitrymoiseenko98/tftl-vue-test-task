@@ -11,14 +11,20 @@
     >
       Drag Me
     </span>
-    <div class="headers">
-      <h1
-        class="header-center"
-        @mouseover="showDragMe()"
-        @mouseleave="hideDragMe()"
+    <div
+      class="headers-container swiper-container"
+      @mouseover="showDragMe()"
+      @mouseleave="hideDragMe()"
+    >
+      <div
+        class="headers-wrapper swiper-wrapper"
       >
-        Ink Lingerie
-      </h1>
+        <div
+          v-for="header in headers"
+          :key="header.id"
+          class="header-slide swiper-slide"
+        ></div>
+      </div>
     </div>
     <div class="parallax" ref="parallax">
       <div
@@ -42,6 +48,7 @@
 <script>
 import { mapState } from 'vuex';
 import Parallax from 'parallax-js';
+import Swiper from 'swiper';
 import curve from '../assets/images/main/curve.svg';
 import imageLeft from '../assets/images/main/image-left.png';
 import imageCenter from '../assets/images/main/image-center.png';
@@ -51,6 +58,11 @@ export default {
   name: 'Main',
   data() {
     return {
+      headers: [
+        { id: 0 },
+        { id: 1 },
+        { id: 2 },
+      ],
       images: [
         {
           id: 0,
@@ -92,8 +104,18 @@ export default {
     ...mapState(['mousePosition']),
   },
   methods: {
-    initParallax() {
+    initBackgroundParallax() {
       new Parallax(this.$refs.parallax); // eslint-disable-line
+    },
+    initHeadersSlider() {
+      const options = {
+        loop: true,
+        slidesPerView: 'auto',
+        centeredSlides: true,
+        slideActiveClass: 'active',
+      };
+
+      new Swiper('.headers-container', options); // eslint-disable-line
     },
     showDragMe() {
       if (this.dragMe.timeout) {
@@ -123,12 +145,14 @@ export default {
     },
   },
   mounted() {
-    this.initParallax();
+    this.initBackgroundParallax();
+    this.initHeadersSlider();
   },
 };
 </script>
 
 <style lang="scss" scoped>
+@import '~swiper/css/swiper.css';
 @import '../assets/scss/media.scss';
 @import '../assets/scss/z-index.scss';
 
@@ -152,133 +176,85 @@ export default {
   transition: opacity .3s;
 }
 
-.headers {
+.headers-container {
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
-  width: 0;
-  height: 0;
+  width: 100%;
+  height: 3.8rem;
   margin: auto;
-}
-
-$headerWidthXs: 21.4rem;
-$headerHeightXs: 3.8rem;
-$headerWidthSm: 23.4rem;
-$headerHeightSm: 4.2rem;
-$headerWidthMd: 46.6rem;
-$headerHeightMd: 8.4rem;
-$headerWidthLg: $headerWidthMd;
-$headerHeightLg: $headerHeightMd;
-$headerWidthXl: 61rem;
-$headerHeightXl: 11rem;
-
-.header-center,
-.headers::before,
-.headers::after {
-  position: absolute;
-  top: -($headerHeightXs / 2);
-  width: $headerWidthXs;
-  height: $headerHeightXs;
 
   @include media("sm") {
-    top: -($headerHeightSm / 2);
-    width: $headerWidthSm;
-    height: $headerHeightSm;
+    height: 4.2rem;
   }
 
   @include media("md") {
-    top: -($headerHeightMd / 2);
-    width: $headerWidthMd;
-    height: $headerHeightMd;
+    height: 8.4rem;
   }
 
   @include media("xl") {
-    top: -($headerHeightXl / 2);
-    width: $headerWidthXl;
-    height: $headerHeightXl;
+    height: 11rem;
   }
 }
 
-.header-center {
-  left: -($headerWidthXs / 2);
-  color: #580300;
-  font-family: "Schnyder X Condensed XL";
-  font-size: 4.4rem;
-  font-weight: 600;
-  line-height: $headerHeightXs;
-  text-align: center;
-  text-transform: uppercase;
+.header-slide {
+  width: 21.4rem;
+  margin: 0 2.8rem;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    transition: opacity .5s;
+  }
+
+  &::before {
+    opacity: 0;
+    background-image: url("../assets/images/main/header.svg");
+  }
+
+  &::after {
+    opacity: 1;
+    background-image: url("../assets/images/main/header-transparent.svg");
+  }
+
+  &.active {
+    &::before {
+      opacity: 1;
+    }
+
+    &::after {
+      opacity: 0;
+    }
+  }
 
   @include media("sm") {
-    left: -($headerWidthSm / 2);
-    font-size: 4.8rem;
-    line-height: $headerHeightSm;
+    width: 23.4rem;
+    margin: 0 3.2rem;
   }
 
   @include media("md") {
-    left: -($headerWidthMd / 2);
-    font-size: 9.6rem;
-    line-height: $headerHeightMd;
-  }
-
-  @include media("xl") {
-    left: -($headerWidthXl / 2);
-    font-size: 12.6rem;
-    line-height: $headerHeightXl;
-  }
-}
-
-.headers::before,
-.headers::after {
-  content: "";
-  display: block;
-  background-image: url("../assets/images/main/header-duplicate.svg");
-  background-repeat: no-repeat;
-  background-size: 88% 88%;
-  background-position: center;
-}
-
-.headers::before {
-  left: -($headerWidthXs * 1.5 + 5.6rem);
-  transform: rotate(-1.5deg);
-
-  @include media("sm") {
-    left: -($headerWidthSm * 1.5 + 6.4rem);
+    width: 46.6rem;
+    margin: 0 6rem;
   }
 
   @include media("md") {
-    left: -($headerWidthMd * 1.5 + 11.8rem);
-  }
-
-  @include media("lg") {
-    left: -($headerWidthLg * 1.5 + 19.8rem);
+    margin: 0 10rem;
   }
 
   @include media("xl") {
-    left: -($headerWidthXl * 1.5 + 31.8rem);
-  }
-}
-
-.headers::after {
-  left: $headerWidthXs / 2 + 5.6rem;
-  transform: rotate(1.5deg);
-
-  @include media("sm") {
-    left: $headerWidthSm / 2 + 6.4rem;
-  }
-
-  @include media("md") {
-    left: $headerWidthMd / 2 + 11.8rem;
-  }
-
-  @include media("lg") {
-    left: $headerWidthLg / 2 + 19.8rem;
-  }
-
-  @include media("xl") {
-    left: $headerWidthXl / 2 + 31.8rem;
+    width: 61rem;
+    margin: 0 15rem;
   }
 }
 
