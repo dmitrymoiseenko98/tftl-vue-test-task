@@ -11,26 +11,38 @@
     >
       Drag Me
     </span>
-    <div class="curve"></div>
-    <div class="images">
-      <img
-        v-for="item in images"
-        :key="item.id"
-        :class="['image', item.className]"
-        :src="item.src"
-        :alt="item.alt"
+    <div class="headers">
+      <h1
+        class="header-center"
         @mouseover="showDragMe()"
         @mouseleave="hideDragMe()"
-      />
+      >
+        Ink Lingerie
+      </h1>
     </div>
-    <div class="headers">
-      <h1 class="header-center">Ink Lingerie</h1>
+    <div class="parallax" ref="parallax">
+      <div
+        v-for="item in images"
+        :key="item.id"
+        :data-depth="item.dataDepth"
+        class="parallax-layer"
+      >
+        <div class="parallax-layer__inner">
+          <img
+            :class="['parallax-layer__image', item.className]"
+            :src="item.src"
+            :alt="item.alt"
+          />
+        </div>
+      </div>
     </div>
   </main>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import Parallax from 'parallax-js';
+import curve from '../assets/images/main/curve.svg';
 import imageLeft from '../assets/images/main/image-left.png';
 import imageCenter from '../assets/images/main/image-center.png';
 import imageRight from '../assets/images/main/image-right.png';
@@ -42,21 +54,31 @@ export default {
       images: [
         {
           id: 0,
-          className: 'image-left',
-          src: imageLeft,
-          alt: 'Image 1',
+          className: 'parallax-layer__image-curve',
+          src: curve,
+          alt: 'Curve',
+          dataDepth: 0.2,
         },
         {
           id: 1,
-          className: 'image-center',
-          src: imageCenter,
-          alt: 'Image 2',
+          className: 'parallax-layer__image-left',
+          src: imageLeft,
+          alt: 'Image 1',
+          dataDepth: 0.4,
         },
         {
           id: 2,
-          className: 'image-right',
+          className: 'parallax-layer__image-center',
+          src: imageCenter,
+          alt: 'Image 2',
+          dataDepth: 0.6,
+        },
+        {
+          id: 3,
+          className: 'parallax-layer__image-right',
           src: imageRight,
           alt: 'Image 3',
+          dataDepth: 0.8,
         },
       ],
       dragMe: {
@@ -70,6 +92,9 @@ export default {
     ...mapState(['mousePosition']),
   },
   methods: {
+    initParallax() {
+      new Parallax(this.$refs.parallax); // eslint-disable-line
+    },
     showDragMe() {
       if (this.dragMe.timeout) {
         clearTimeout(this.dragMe.timeout);
@@ -96,6 +121,9 @@ export default {
         this.dragMe.show = false;
       }, transitionDuration);
     },
+  },
+  mounted() {
+    this.initParallax();
   },
 };
 </script>
@@ -124,144 +152,15 @@ export default {
   transition: opacity .3s;
 }
 
-.curve,
-.images,
 .headers {
   position: absolute;
   top: 0;
   right: 0;
   bottom: 0;
   left: 0;
+  width: 0;
+  height: 0;
   margin: auto;
-}
-
-.curve {
-  z-index: 0;
-  width: 34rem;
-  height: 43rem;
-  background-image: url("../assets/images/main/curve.svg");
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
-
-  @include media("sm") {
-    width: 39.2rem;
-    height: 49.4rem;
-  }
-
-  @include media("md") {
-    width: 62.8rem;
-    height: 79rem;
-  }
-
-  @include media("lg") {
-    width: 50.6rem;
-    height: 60.5rem;
-  }
-
-  @include media("xl") {
-    width: 60.8rem;
-    height: 72.6rem;
-  }
-}
-
-.images {
-  z-index: 1;
-  width: 0;
-  height: 0;
-}
-
-.image {
-  position: absolute;
-}
-
-.image-left {
-  top: -16.2rem;
-  left: -35.4rem;
-  z-index: 0;
-  display: none;
-  width: 16.4rem;
-  height: 22.6rem;
-  transform: rotate(1.1deg);
-
-  @include media("md") {
-    display: block;
-  }
-
-  @include media("xl") {
-    top: -23rem;
-    left: -48.8rem;
-    width: 23.8rem;
-    height: 33rem;
-  }
-}
-
-$imageCenterWidthXs: 25rem;
-$imageCenterHeightXs: 36.8rem;
-$imageCenterWidthSm: 27.4rem;
-$imageCenterHeightSm: 40.4rem;
-$imageCenterWidthMd: 36rem;
-$imageCenterHeightMd: 53rem;
-$imageCenterWidthXl: 47.6rem;
-$imageCenterHeightXl: 70.2rem;
-
-.image-center {
-  z-index: 1;
-  top: -($imageCenterHeightXs / 2);
-  left: -($imageCenterWidthXs / 2);
-  width: $imageCenterWidthXs;
-  height: $imageCenterHeightXs;
-  transform: rotate(1.5deg);
-
-  @include media("sm") {
-    top: -($imageCenterHeightSm / 2);
-    left: -($imageCenterWidthSm / 2);
-    width: $imageCenterWidthSm;
-    height: $imageCenterHeightSm;
-  }
-
-  @include media("md") {
-    top: -($imageCenterHeightMd / 2);
-    left: -($imageCenterWidthMd / 2);
-    width: $imageCenterWidthMd;
-    height: $imageCenterHeightMd;
-  }
-
-  @include media("xl") {
-    top: -($imageCenterHeightXl / 2);
-    left: -($imageCenterWidthXl / 2);
-    width: $imageCenterWidthXl;
-    height: $imageCenterHeightXl;
-  }
-}
-
-.image-right {
-  z-index: 2;
-  top: 0;
-  left: 0;
-  display: none;
-  width: 23.4rem;
-  height: 16.2rem;
-  transform: rotate(2.04deg);
-
-  @include media("md") {
-    top: 5.8rem;
-    left: 12.8rem;
-    display: block;
-  }
-
-  @include media("xl") {
-    top: 6.4rem;
-    left: 17.2rem;
-    width: 34.5rem;
-    height: 23.8rem;
-  }
-}
-
-.headers {
-  z-index: 2;
-  width: 0;
-  height: 0;
 }
 
 $headerWidthXs: 21.4rem;
@@ -380,6 +279,105 @@ $headerHeightXl: 11rem;
 
   @include media("xl") {
     left: $headerWidthXl / 2 + 31.8rem;
+  }
+}
+
+.parallax,
+.parallax-layer,
+.parallax-layer__inner {
+  width: 100%;
+  height: 100%;
+}
+
+.parallax-layer__inner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.parallax-layer__image-curve {
+  width: 34rem;
+  height: 43rem;
+
+  @include media("sm") {
+    width: 39.2rem;
+    height: 49.4rem;
+  }
+
+  @include media("md") {
+    width: 62.8rem;
+    height: 79rem;
+  }
+
+  @include media("lg") {
+    width: 50.6rem;
+    height: 60.5rem;
+  }
+
+  @include media("xl") {
+    width: 60.8rem;
+    height: 72.6rem;
+  }
+}
+
+.parallax-layer__image-left {
+  display: none;
+  width: 16.4rem;
+  height: 22.6rem;
+  transform: rotate(1.1deg);
+
+  @include media("md") {
+    margin-top: -9.6rem;
+    margin-left: -54rem;
+    display: block;
+  }
+
+  @include media("xl") {
+    margin-top: -12.4rem;
+    margin-left: -73rem;
+    width: 23.8rem;
+    height: 33rem;
+  }
+}
+
+.parallax-layer__image-center {
+  width: 25rem;
+  height: 36.8rem;
+  transform: rotate(1.5deg);
+
+  @include media("sm") {
+    width: 27.4rem;
+    height: 40.4rem;
+  }
+
+  @include media("md") {
+    width: 36rem;
+    height: 53rem;
+  }
+
+  @include media("xl") {
+    width: 47.6rem;
+    height: 70.2rem;
+  }
+}
+
+.parallax-layer__image-right {
+  display: none;
+  width: 23.4rem;
+  height: 16.2rem;
+  transform: rotate(2.04deg);
+
+  @include media("md") {
+    display: block;
+    margin-right: -49.6rem;
+    margin-bottom: -28.4rem;
+  }
+
+  @include media("xl") {
+    width: 34.5rem;
+    height: 23.8rem;
+    margin-right: -70rem;
+    margin-bottom: -38rem;
   }
 }
 </style>
