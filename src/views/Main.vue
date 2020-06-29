@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import Parallax from 'parallax-js';
 import Swiper from 'swiper';
 import curve from '../assets/images/main/curve.svg';
@@ -104,15 +104,23 @@ export default {
     ...mapState(['mousePosition']),
   },
   methods: {
+    ...mapActions(['setMousePosition']),
     initBackgroundParallax() {
       new Parallax(this.$refs.parallax); // eslint-disable-line
     },
     initHeadersSlider() {
+      const component = this;
+
       const options = {
         loop: true,
         slidesPerView: 'auto',
         centeredSlides: true,
         slideActiveClass: 'active',
+        on: {
+          touchMove(event) {
+            component.setMousePosition(event);
+          },
+        },
       };
 
       new Swiper('.headers-container', options); // eslint-disable-line

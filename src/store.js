@@ -17,12 +17,12 @@ export default new Vuex.Store({
   },
   actions: {
     setMousePosition(context, event) {
-      const payload = {
+      const position = {
         x: event.clientX,
         y: event.clientY,
       };
 
-      context.commit('setMousePosition', payload);
+      context.commit('setMousePosition', position);
     },
   },
 });
