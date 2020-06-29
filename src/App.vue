@@ -67,5 +67,16 @@ button {
   min-width: 32rem;
   height: 100%;
   position: relative;
+  animation: fadeIn 3s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 </style>
