@@ -264,6 +264,14 @@ export default {
     width: 61rem;
     margin: 0 15rem;
   }
+
+  &.swiper-slide-prev {
+    transform: rotate(-1.5deg);
+  }
+
+  &.swiper-slide-next {
+    transform: rotate(1.5deg);
+  }
 }
 
 .parallax,
