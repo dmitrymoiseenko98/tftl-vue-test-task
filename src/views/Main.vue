@@ -1,10 +1,27 @@
 <template>
   <main class="main">
+    <span
+      class="drag-me"
+      v-if="dragMe.show"
+      :style="{
+        top: `${(mousePosition.y - 16) / 10}rem`,
+        left: `${(mousePosition.x + 16) / 10}rem`,
+        opacity: dragMe.opacity,
+      }"
+    >
+      Drag Me
+    </span>
     <div class="curve"></div>
     <div class="images">
-      <img class="image image-left" src="../assets/images/main/image-left.png" alt="Image 1">
-      <img class="image image-center" src="../assets/images/main/image-center.png" alt="Image 2">
-      <img class="image image-right" src="../assets/images/main/image-right.png" alt="Image 3">
+      <img
+        v-for="item in images"
+        :key="item.id"
+        :class="['image', item.className]"
+        :src="item.src"
+        :alt="item.alt"
+        @mouseover="showDragMe()"
+        @mouseleave="hideDragMe()"
+      />
     </div>
     <div class="headers">
       <h1 class="header-center">Ink Lingerie</h1>
@@ -13,18 +30,98 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import imageLeft from '../assets/images/main/image-left.png';
+import imageCenter from '../assets/images/main/image-center.png';
+import imageRight from '../assets/images/main/image-right.png';
+
 export default {
   name: 'Main',
+  data() {
+    return {
+      images: [
+        {
+          id: 0,
+          className: 'image-left',
+          src: imageLeft,
+          alt: 'Image 1',
+        },
+        {
+          id: 1,
+          className: 'image-center',
+          src: imageCenter,
+          alt: 'Image 2',
+        },
+        {
+          id: 2,
+          className: 'image-right',
+          src: imageRight,
+          alt: 'Image 3',
+        },
+      ],
+      dragMe: {
+        show: false,
+        opacity: 0,
+        timeout: 0,
+      },
+    };
+  },
+  computed: {
+    ...mapState(['mousePosition']),
+  },
+  methods: {
+    showDragMe() {
+      if (this.dragMe.timeout) {
+        clearTimeout(this.dragMe.timeout);
+      }
+
+      this.dragMe.show = true;
+
+      const transitionDelay = 0; // Min delay to activate transition animation
+
+      this.dragMe.timeout = setTimeout(() => {
+        this.dragMe.opacity = 1;
+      }, transitionDelay);
+    },
+    hideDragMe() {
+      if (this.dragMe.timeout) {
+        clearTimeout(this.dragMe.timeout);
+      }
+
+      this.dragMe.opacity = 0;
+
+      const transitionDuration = 300; // Duration of .drag-me opacity transition
+
+      this.dragMe.timeout = setTimeout(() => {
+        this.dragMe.show = false;
+      }, transitionDuration);
+    },
+  },
 };
 </script>
 
 <style lang="scss" scoped>
 @import '../assets/scss/media.scss';
+@import '../assets/scss/z-index.scss';
 
 .main {
   position: relative;
   height: 100%;
   overflow: hidden;
+}
+
+.drag-me {
+  position: absolute;
+  left: 20rem;
+  top: 20rem;
+  z-index: z-index("dropdown");
+  display: block;
+  width: 4rem;
+  height: 1rem;
+  font-size: .8rem;
+  line-height: 1rem;
+  text-transform: uppercase;
+  transition: opacity .3s;
 }
 
 .curve,

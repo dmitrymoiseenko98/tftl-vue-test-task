@@ -1,5 +1,8 @@
 <template>
-  <div id="app">
+  <div
+    id="app"
+    @mousemove="setMousePosition($event)"
+  >
     <app-header/>
     <router-view/>
     <app-footer/>
@@ -7,6 +10,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import Header from './components/Header.vue';
 import Footer from './components/Footer.vue';
 
@@ -15,6 +19,9 @@ export default {
   components: {
     'app-header': Header,
     'app-footer': Footer,
+  },
+  methods: {
+    ...mapActions(['setMousePosition']),
   },
 };
 </script>
