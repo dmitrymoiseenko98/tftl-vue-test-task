@@ -20,7 +20,7 @@
         class="headers-wrapper swiper-wrapper"
       >
         <div
-          v-for="header in headers"
+          v-for="header in slider.headers"
           :key="header.id"
           class="header-slide swiper-slide"
         ></div>
@@ -28,17 +28,31 @@
     </div>
     <div class="parallax" ref="parallax">
       <div
-        v-for="item in images"
-        :key="item.id"
-        :data-depth="item.dataDepth"
         class="parallax-layer"
+        :data-depth="images.curve.dataDepth"
       >
         <div class="parallax-layer__inner">
           <img
-            :class="['parallax-layer__image', item.className]"
-            :src="item.src"
-            :alt="item.alt"
+            class="curve"
+            :src="images.curve.src"
+            :alt="images.curve.alt"
           />
+        </div>
+      </div>
+      <div
+        v-for="(item, index) in images.models.containers"
+        :key="item.id"
+        class="parallax-layer"
+        :data-depth="item.dataDepth"
+      >
+        <div class="parallax-layer__inner">
+          <div :class="['model', item.className]">
+            <img
+              class="model__image"
+              :src="images.models.sources[index].src"
+              :alt="images.models.sources[index].alt"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -50,49 +64,62 @@ import { mapState, mapActions } from 'vuex';
 import Parallax from 'parallax-js';
 import Swiper from 'swiper';
 import curve from '../assets/images/main/curve.svg';
-import imageLeft from '../assets/images/main/image-left.png';
-import imageCenter from '../assets/images/main/image-center.png';
-import imageRight from '../assets/images/main/image-right.png';
+import model1 from '../assets/images/main/model-1.png';
+import model2 from '../assets/images/main/model-2.png';
+import model3 from '../assets/images/main/model-3.png';
 
 export default {
   name: 'Main',
   data() {
     return {
-      headers: [
-        { id: 0 },
-        { id: 1 },
-        { id: 2 },
-      ],
-      images: [
-        {
-          id: 0,
-          className: 'parallax-layer__image-curve',
+      slider: {
+        prevIndex: 0,
+        headers: [
+          { id: 0 },
+          { id: 1 },
+          { id: 2 },
+        ],
+      },
+      images: {
+        curve: {
           src: curve,
           alt: 'Curve',
           dataDepth: 0.2,
         },
-        {
-          id: 1,
-          className: 'parallax-layer__image-left',
-          src: imageLeft,
-          alt: 'Image 1',
-          dataDepth: 0.4,
+        models: {
+          containers: [
+            {
+              id: 0,
+              className: 'model-left',
+              dataDepth: 0.4,
+            },
+            {
+              id: 1,
+              className: 'model-center',
+              dataDepth: 0.6,
+            },
+            {
+              id: 2,
+              className: 'model-right',
+              dataDepth: 0.8,
+            },
+          ],
+          sources: [
+            {
+              src: model1,
+              alt: 'Model 1',
+            },
+            {
+              src: model2,
+              alt: 'Model 2',
+            },
+            {
+              src: model3,
+              alt: 'Model 3',
+            },
+          ],
         },
-        {
-          id: 2,
-          className: 'parallax-layer__image-center',
-          src: imageCenter,
-          alt: 'Image 2',
-          dataDepth: 0.6,
-        },
-        {
-          id: 3,
-          className: 'parallax-layer__image-right',
-          src: imageRight,
-          alt: 'Image 3',
-          dataDepth: 0.8,
-        },
-      ],
+      },
       dragMe: {
         show: false,
         opacity: 0,
@@ -119,6 +146,9 @@ export default {
         on: {
           touchMove(event) {
             component.setMousePosition(event);
+          },
+          slideChange() {
+            component.updateModelPhotos(this.realIndex);
           },
         },
       };
@@ -150,6 +180,33 @@ export default {
       this.dragMe.timeout = setTimeout(() => {
         this.dragMe.show = false;
       }, transitionDuration);
+    },
+    updateModelPhotos(currentIndex) {
+      // Prevent case when Swiper fires slideChange event and pass 0 twice
+      // after passing the loop
+      if (this.slider.prevIndex === currentIndex) {
+        return;
+      }
+
+      const isNext = (
+        currentIndex - this.slider.prevIndex === 1
+      ) || (
+        this.slider.prevIndex === this.slider.headers.length - 1 && currentIndex === 0
+      );
+
+      if (isNext) {
+        this.images.models.sources = [
+          ...this.images.models.sources.slice(1),
+          this.images.models.sources[0],
+        ];
+      } else {
+        this.images.models.sources = [
+          this.images.models.sources[this.images.models.sources.length - 1],
+          ...this.images.models.sources.slice(0, this.images.models.sources.length - 1),
+        ];
+      }
+
+      this.slider.prevIndex = currentIndex;
     },
   },
   mounted() {
@@ -287,7 +344,7 @@ export default {
   align-items: center;
 }
 
-.parallax-layer__image-curve {
+.curve {
   width: 34rem;
   height: 43rem;
 
@@ -312,7 +369,11 @@ export default {
   }
 }
 
-.parallax-layer__image-left {
+.model {
+  position: relative;
+}
+
+.model-left {
   display: none;
   width: 16.4rem;
   height: 22.6rem;
@@ -332,7 +393,7 @@ export default {
   }
 }
 
-.parallax-layer__image-center {
+.model-center {
   width: 25rem;
   height: 36.8rem;
   transform: rotate(1.5deg);
@@ -353,7 +414,7 @@ export default {
   }
 }
 
-.parallax-layer__image-right {
+.model-right {
   display: none;
   width: 23.4rem;
   height: 16.2rem;
@@ -371,5 +432,14 @@ export default {
     margin-right: -70rem;
     margin-bottom: -38rem;
   }
+}
+
+.model__image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 </style>
